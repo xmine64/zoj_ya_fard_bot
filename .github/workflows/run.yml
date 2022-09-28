@@ -1,0 +1,19 @@
+on:
+  schedule:
+    - cron: '30 17 * * FRI'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      # set START_YEAR, START_MONTH, START_DAY in repository settings
+      BOT_TOKEN_ID: ${{ secrets.BOT_TOKEN_ID }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+      - run: pip install -r requirements.txt
+      - run: python main.py
