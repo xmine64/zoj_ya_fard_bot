@@ -14,12 +14,22 @@ tokenId = os.environ['BOT_TOKEN_ID']
 # target channel id
 chatId = os.environ['CHAT_ID']
 # messages
-evenText = "فردا هفته زوجه"
-oddText = "فردا هفته فرده"
+foodReserveText = "رزرو غذا فراموش نشه."
+nextWeek = "هفته بعد، "
+evenText = "هفته زوجه."
+oddText = "هفته فرده."
 
 #
 # functions
 #
+
+def getNextSaturday() -> datetime:
+    result = datetime.now()
+    delta = 5 - result.weekday();
+    if delta < 0:
+        delta += 7;
+    result += timedelta(days = delta)
+    return result
 
 def isEven(start: datetime, current: datetime) -> bool:
     # difference of days since start of classes
@@ -34,5 +44,5 @@ def send(tokenId, chatId, message):
     params = { 'chat_id': chatId, 'text': message }
     requests.post(url = url, params = params)
 
-message = evenText if isEven(start, datetime.now() + timedelta(days = 1)) else oddText
-send(tokenId, chatId, message)
+message = evenText if isEven(start, getNextSaturday()) else oddText
+send(tokenId, chatId, nextWeek + message + "\n" + foodReserveText)

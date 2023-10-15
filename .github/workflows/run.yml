@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '30 6 * * FRI'
+    - cron: '30 6 * * THU'
   workflow_dispatch:
 
 jobs:
@@ -14,8 +14,12 @@ jobs:
       CHAT_ID: ${{ secrets.CHAT_ID }}
     steps:
       - uses: actions/checkout@v2
+      
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          python-version: '3.x'
+          cache: 'pip'
+
       - run: pip install -r requirements.txt
+      
       - run: python main.py
